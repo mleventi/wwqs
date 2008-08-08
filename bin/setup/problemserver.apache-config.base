@@ -1,0 +1,58 @@
+################################################################################
+# WeBWorK Online Homework Delivery System
+# Copyright © 2000-2006 The WeBWorK Project, http://openwebwork.sf.net/
+# $CVSHeader: ww_question_server/bin/setup/problemserver.apache-config.base,v 1.2 2007/08/29 04:31:58 mleventi Exp $
+#
+# This program is free software; you can redistribute it and/or modify it under
+# the terms of either: (a) the GNU General Public License as published by the
+# Free Software Foundation; either version 2, or (at your option) any later
+# version, or (b) the "Artistic License" which comes with this package.
+#
+# This program is distributed in the hope that it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+# FOR A PARTICULAR PURPOSE.  See either the GNU General Public License or the
+# Artistic License for more details.
+################################################################################
+
+<Perl>
+
+#######################################################
+#CONFIGURATION
+#######################################################
+
+#Define the ProblemServer static variables
+MARKER_FOR_CONF
+
+#Include the problemserver libraries
+eval "use lib '$root_dir/lib'"; die $@ if $@;
+eval "use lib '$root_pg_dir/lib'"; die $@ if $@;
+
+#Load the Module
+push @PerlModule, 'ProblemServer';
+
+$ProblemServer::Host = $hostname;
+$ProblemServer::RootDir = $root_dir;
+$ProblemServer::RootPGDir = $root_pg_dir;
+$ProblemServer::RPCURL = $rpc_url;
+$ProblemServer::FilesURL = $files_url;
+
+#Alias the Directory
+my $htdocs_dir = "$root_dir/htdocs";
+push @Alias, ["$files_url","$htdocs_dir"];
+
+$Directory{"$htdocs_dir"} = {
+    Allow               => 'from all',
+    AllowOverride       => 'All',
+    Order               => 'allow,deny'
+};
+
+#PROBLEMSERVER SOAP CONFIGURATION
+$Location{"$rpc_url"} = {
+        PerlSetVar      => 'dispatch_to "ProblemServer"',
+	PerlHandler     => 'MARKER_FOR_APACHE',
+	SetHandler      => 'perl-script',
+	Order           => 'allow,deny',
+	Allow           => 'from all'
+};
+
+</Perl>

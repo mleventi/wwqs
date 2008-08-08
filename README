@@ -1,0 +1,14 @@
+Webwork Question Server
+----------------------
+Maintainer: Matthew Leventi  <mleventi@gmail.com>
+SVN: http://question.webwork.rochester.edu/svn/ww_question_server/trunk ww_question_server
+
+** If your using this send me an email **
+
+Note: You don't need to install the WeBWorK system for this server to function. All you need is the PG libraries.
+
+Setup:
+	1) Run the bin/setup/setup.pl
+
+For more information visit the wiki:
+http://question.webwork.rochester.edu
